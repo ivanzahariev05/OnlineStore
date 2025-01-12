@@ -1,6 +1,8 @@
-package softuni.bg.supplementsonlinestore.models;
+package softuni.bg.supplementsonlinestore.model;
 
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +23,9 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String role;
+
+    @ManyToMany
+    private List<Product> products;
 
     public User() {}
 

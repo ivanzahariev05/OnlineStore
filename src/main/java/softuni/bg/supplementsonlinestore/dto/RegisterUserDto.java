@@ -12,7 +12,7 @@ public class RegisterUserDto {
     @Email(message = "Невалиден имейл!")
     private String email;
 
-    @NotBlank(message = "Паролата трябва да съдържа поне една цифра, един специален символ, една малка и главна буква и да е с дължина минимум 6 символа")
+    @NotBlank(message = "Паролата трябва да е с дължина минимум 6 символа")
     private String password;
 
     public @NotBlank(message = "Потребителското име е задължително!") String getUsername() {
@@ -23,7 +23,7 @@ public class RegisterUserDto {
         return email;
     }
 
-    public @NotBlank(message = "Паролата трябва да съдържа поне една цифра, един специален символ, една малка и главна буква и да е с дължина минимум 6 символа") String getPassword() {
+    public @NotBlank(message = "Паролата трябва да е с дължина минимум 6 символа") String getPassword() {
         return password;
     }
 }

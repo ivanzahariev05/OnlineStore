@@ -7,26 +7,26 @@
 <body>
 <div class="container">
     <h1>Регистрация</h1>
-    <form th:action="@{/users/register}" th:object="${registerUserDto}" method="post">
+    <form th:action="@{/register}" th:object="${registerUserDto}" method="post">
         <div>
             <label>Потребителско име:</label>
-            <input type="text" th:field="username" />
-            <p th:if="${#fields.hasErrors('username')}" th:errors="username"></p>
+            <input type="text" th:field="*{username}" />
+            <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
         </div>
         <div>
             <label>Имейл:</label>
-            <input type="email" th:field="email" />
-            <p th:if="${#fields.hasErrors('email')}" th:errors="email"></p>
+            <input type="email" th:field="*{email}" />
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
         </div>
         <div>
             <label>Парола:</label>
-            <input type="password" th:field="password" />
-            <p th:if="${#fields.hasErrors('password')}" th:errors="password"></p>
+            <input type="password" th:field="*{password}" />
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
         </div>
         <button type="submit">Регистрация</button>
     </form>
     <div class="footer">
-        <p>Вече имаш профил? <a href="/users/login">Влез тук</a></p>
+        <p>Вече имаш профил? <a href="/login">Влез тук</a></p>
     </div>
 </div>
 </body>

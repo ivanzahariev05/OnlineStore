@@ -11,11 +11,11 @@ import softuni.bg.supplementsonlinestore.dto.RegisterUserDto;
 import softuni.bg.supplementsonlinestore.service.UserService;
 
 @Controller
-public class UserRegisterController {
+public class UserController {
 
     private final UserService userService;
 
-    public UserRegisterController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

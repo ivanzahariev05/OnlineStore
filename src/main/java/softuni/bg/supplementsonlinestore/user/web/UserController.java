@@ -1,4 +1,4 @@
-package softuni.bg.supplementsonlinestore.web;
+package softuni.bg.supplementsonlinestore.user.web;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -7,8 +7,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import softuni.bg.supplementsonlinestore.dto.RegisterUserDto;
-import softuni.bg.supplementsonlinestore.service.UserService;
+import softuni.bg.supplementsonlinestore.exception.DomainException;
+import softuni.bg.supplementsonlinestore.user.dto.LoginRequest;
+import softuni.bg.supplementsonlinestore.user.dto.RegisterRequest;
+import softuni.bg.supplementsonlinestore.user.service.UserService;
 
 @Controller
 public class UserController {
@@ -21,12 +23,12 @@ public class UserController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("registerUserDto", new RegisterUserDto());
+        model.addAttribute("RegisterRequest", new RegisterRequest());
         return "register";
     }
 
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("registerUserDto") RegisterUserDto registerUserDto,
+    public String registerUser(@Valid @ModelAttribute("RegisterRequest") RegisterRequest registerUserDto,
                                BindingResult bindingResult,
                                Model model) {
         if (bindingResult.hasErrors()) {
@@ -35,7 +37,7 @@ public class UserController {
 
         try {
             userService.registerUser(registerUserDto);
-        } catch (RuntimeException e) {
+        } catch (DomainException e) {
             model.addAttribute("error", e.getMessage());
             return "register";
         }
@@ -47,6 +49,22 @@ public class UserController {
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginUser(@Valid @ModelAttribute("loginUserDto") LoginRequest loginUserDto,
+    BindingResult bindingResult,
+    Model model) {
+        if (bindingResult.hasErrors()) {
+            return "login";
+        }
+        try {
+            userService.loginUser(loginUserDto);
+        }catch (DomainException e) {
+            model.addAttribute("error", e.getMessage());
+            return "login";
+        }
+        return "redirect:/index";
     }
 }
 

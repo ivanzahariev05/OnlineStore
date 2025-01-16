@@ -2,20 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Вход</title>
-  <link rel="stylesheet" href="/style.css"></head>
+  <link rel="stylesheet" href="/register_login.css"></head>
 <body>
-<h1>Вход</h1>
 <form th:action="@{/users/login}" method="post">
   <div class="container">
+    <h1>Sign in</h1>
     <div>
-      <label>Потребителско име:</label>
+      <label>Username:</label>
       <input type="text" name="username" />
     </div>
     <div>
-      <label>Парола:</label>
+      <label>Password:</label>
       <input type="password" name="password" />
     </div>
-    <button type="submit">Вход</button>
+    <button type="submit">Sign in</button>
   </div>
 </form>
 </body>

@@ -1,10 +1,8 @@
-package softuni.bg.supplementsonlinestore.repository;
+package softuni.bg.supplementsonlinestore.user.repository;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import softuni.bg.supplementsonlinestore.model.User;
+import softuni.bg.supplementsonlinestore.user.model.User;
 
 import java.util.Optional;
 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продукти</title>
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body class="index-page">
+<div class="nav-bar">
+    <div class="nav-right">
+        <a href="/users/register">Register</a>
+        <a href="/users/login">Sign in</a>
+    </div>
+</div>
+
+<div class="product-container">
+    <div th:each="product : ${products}" class="product-card">
+        <img th:src="${product.imageUrl}" alt="Product Image">
+        <h3 th:text="${product.name}">Product Name</h3>
+        <p th:text="'Price: $' + ${product.price}">Price</p>
+        <a th:href="@{/product-details/{id}(id=${product.id})}" class="details-button">View Details</a>
+    </div>
+</div>
+
+<footer class="footer">
+    &copy; 2025 Online store for supplements. All rights reserved
+</footer>
+</body>
+</html>

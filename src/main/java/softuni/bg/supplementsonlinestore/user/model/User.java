@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import softuni.bg.supplementsonlinestore.products.model.Product;
+import softuni.bg.supplementsonlinestore.product.model.Product;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -19,8 +21,8 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -36,6 +38,8 @@ public class User {
 
     @Column(nullable = false)
     private LocalDate registrationDate;
+
+    private String imageUrl;
 
     @ManyToMany
     private List<Product> products;

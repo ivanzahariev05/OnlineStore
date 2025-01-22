@@ -1,4 +1,4 @@
-package softuni.bg.supplementsonlinestore.user.dto;
+package softuni.bg.supplementsonlinestore.web.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

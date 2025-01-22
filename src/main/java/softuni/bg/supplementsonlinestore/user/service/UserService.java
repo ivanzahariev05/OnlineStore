@@ -4,12 +4,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import softuni.bg.supplementsonlinestore.exception.DomainException;
-import softuni.bg.supplementsonlinestore.user.dto.LoginRequest;
-import softuni.bg.supplementsonlinestore.user.dto.RegisterRequest;
+import softuni.bg.supplementsonlinestore.web.dto.LoginRequest;
+import softuni.bg.supplementsonlinestore.web.dto.RegisterRequest;
 import softuni.bg.supplementsonlinestore.user.model.Role;
 import softuni.bg.supplementsonlinestore.user.model.User;
 import softuni.bg.supplementsonlinestore.user.repository.UserRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Service
@@ -39,6 +40,7 @@ public class UserService {
                  .email(registerRequest.getEmail())
                  .role(Role.USER)
                  .registrationDate(LocalDate.now())
+                 .balance(new BigDecimal("0.00"))
                  .build();
 
         userRepository.save(user);
@@ -54,4 +56,6 @@ public class UserService {
         }
         return user;
     }
+
+  
 }

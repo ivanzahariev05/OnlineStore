@@ -1,8 +1,8 @@
-package softuni.bg.supplementsonlinestore.products.service;
+package softuni.bg.supplementsonlinestore.product.service;
 
 import org.springframework.stereotype.Service;
-import softuni.bg.supplementsonlinestore.products.model.Product;
-import softuni.bg.supplementsonlinestore.products.repository.ProductRepository;
+import softuni.bg.supplementsonlinestore.product.model.Product;
+import softuni.bg.supplementsonlinestore.product.repository.ProductRepository;
 
 import java.util.Collections;
 import java.util.List;

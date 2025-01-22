@@ -1,17 +1,19 @@
-package softuni.bg.supplementsonlinestore.products.model;
+package softuni.bg.supplementsonlinestore.product.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.UUID;
+
 @Data
 @Entity
 @Table(name = "products")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
@@ -23,7 +25,11 @@ public class Product {
     private BigDecimal price;
 
     @Column(nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private ProductType type;
+
+    @Column(nullable = false)
+    private int quantity;
 
     @Column(nullable = false)
     private String imageUrl;

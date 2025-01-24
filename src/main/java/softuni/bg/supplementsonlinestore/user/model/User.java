@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import softuni.bg.supplementsonlinestore.order.model.Order;
 import softuni.bg.supplementsonlinestore.product.model.Product;
+import softuni.bg.supplementsonlinestore.transaction.model.Transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -41,7 +43,10 @@ public class User {
 
     private String imageUrl;
 
-    @ManyToMany
-    private List<Product> products;
+    @OneToMany
+    private List<Order> orders;
+
+    @OneToMany
+    private List<Transaction> transactions;
 }
 

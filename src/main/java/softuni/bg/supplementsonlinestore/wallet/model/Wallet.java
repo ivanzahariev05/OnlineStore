@@ -1,11 +1,16 @@
 package softuni.bg.supplementsonlinestore.wallet.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import softuni.bg.supplementsonlinestore.user.model.User;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "wallets")
 public class Wallet {

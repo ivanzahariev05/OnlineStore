@@ -2,16 +2,14 @@ package softuni.bg.supplementsonlinestore.web;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import softuni.bg.supplementsonlinestore.exception.DomainException;
 import softuni.bg.supplementsonlinestore.user.model.User;
 import softuni.bg.supplementsonlinestore.user.service.UserService;
+import softuni.bg.supplementsonlinestore.web.dto.LoginRequest;
 import softuni.bg.supplementsonlinestore.web.dto.RegisterRequest;
 
 @Controller
@@ -35,10 +33,12 @@ public class IndexController {
     public ModelAndView login() {
         User user = new User();
         ModelAndView modelAndView = new ModelAndView("login");
-        modelAndView.addObject("user", user);
         modelAndView.setViewName("login");
+        modelAndView.addObject("loginRequest", new LoginRequest());
         return modelAndView;
     }
+
+
 
     @GetMapping("/register")
     public ModelAndView register() {
@@ -56,9 +56,19 @@ public class IndexController {
             return  new ModelAndView("register");
         }
 
-        User user = new User();
         userService.registerUser(registerRequest);
         modelAndView.setViewName("redirect:/login");
         return modelAndView;
+    }
+
+    @PostMapping("/login")
+    public ModelAndView loginUser(@Valid LoginRequest loginRequest, BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (bindingResult.hasErrors()) {
+            return  new ModelAndView("login");
+        }
+       userService.loginUser(loginRequest);
+       modelAndView.setViewName("redirect:/home");
+       return modelAndView;
     }
 }

@@ -1,16 +1,20 @@
 package softuni.bg.supplementsonlinestore.web.dto;
 
 
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginRequest {
 
-    @Size(min = 3, max = 20, message = "Username is required!")
+    @NotBlank
     private String username;
 
-    @Size(min = 6, max = 20, message = "Password is required!")
+    @NotBlank
     private String password;
 
 

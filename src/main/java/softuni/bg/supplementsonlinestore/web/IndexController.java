@@ -1,12 +1,15 @@
 package softuni.bg.supplementsonlinestore.web;
 
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import softuni.bg.supplementsonlinestore.security.MetaDataAuthentication;
 import softuni.bg.supplementsonlinestore.user.model.User;
 import softuni.bg.supplementsonlinestore.user.service.UserService;
 import softuni.bg.supplementsonlinestore.web.dto.LoginRequest;
@@ -30,19 +33,19 @@ public class IndexController {
 
 
     @GetMapping("/login")
-    public ModelAndView login() {
-        User user = new User();
+    public ModelAndView getLogin(@RequestParam(value = "error", required = false) User errorParam) {
         ModelAndView modelAndView = new ModelAndView("login");
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
+        if (errorParam != null) {
+            modelAndView.addObject("errorMessage", "Incorrect username or password.");
+        }
         return modelAndView;
     }
 
 
-
     @GetMapping("/register")
     public ModelAndView register() {
-        User user = new User();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("register");
         modelAndView.addObject("registerRequest", new RegisterRequest());
@@ -53,7 +56,7 @@ public class IndexController {
     public ModelAndView registerUser(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
-            return  new ModelAndView("register");
+            return new ModelAndView("register");
         }
 
         userService.registerUser(registerRequest);
@@ -61,14 +64,15 @@ public class IndexController {
         return modelAndView;
     }
 
-    @PostMapping("/login")
-    public ModelAndView loginUser(@Valid LoginRequest loginRequest, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
-        if (bindingResult.hasErrors()) {
-            return  new ModelAndView("login");
-        }
-       userService.loginUser(loginRequest);
-       modelAndView.setViewName("redirect:/home");
-       return modelAndView;
+
+
+    @GetMapping("/home")
+    public ModelAndView home(@AuthenticationPrincipal MetaDataAuthentication metaDataAuthority) {
+        ModelAndView modelAndView = new ModelAndView("home");
+        User user = userService.findById(metaDataAuthority.getId());
+        modelAndView.addObject("user", user);
+        return modelAndView;
     }
+
+
 }

@@ -6,11 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import softuni.bg.supplementsonlinestore.order.model.Order;
-import softuni.bg.supplementsonlinestore.product.model.Product;
 import softuni.bg.supplementsonlinestore.transaction.model.Transaction;
+import softuni.bg.supplementsonlinestore.wallet.model.Wallet;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,26 +26,40 @@ public class User {
     private UUID id;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private java.lang.String username;
 
     @Column(unique = true, nullable = false)
-    private String email;
+    private java.lang.String email;
 
     @Column(nullable = false)
-    private String password;
+    private java.lang.String password;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(nullable = false)
-    private LocalDate registrationDate;
+    private LocalDateTime registrationDate;
 
-    private String imageUrl;
+    private java.lang.String imageUrl;
+
+    private java.lang.String firstName;
+
+    private java.lang.String lastName;
+
+    private boolean isActive;
+
+    private int ordersCount;
 
     @OneToMany
     private List<Order> orders;
 
     @OneToMany
     private List<Transaction> transactions;
+
+    @OneToOne
+    private Wallet wallet;
+
+
 }
 

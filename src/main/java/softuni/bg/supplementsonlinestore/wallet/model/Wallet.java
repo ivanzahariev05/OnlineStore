@@ -2,17 +2,20 @@ package softuni.bg.supplementsonlinestore.wallet.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import softuni.bg.supplementsonlinestore.user.model.User;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "wallets")
+@Builder
 public class Wallet {
 
     @Id
@@ -22,8 +25,9 @@ public class Wallet {
     @Column(nullable = false)
     private BigDecimal balance;
 
-    @OneToOne
-    private User user;
+    private Currency currency;
 
+    @OneToOne
+    private User owner;
 
 }

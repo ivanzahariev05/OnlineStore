@@ -28,12 +28,8 @@ public class Order {
 
     private LocalDate orderDate;
 
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
-
     @OneToMany
-    private List<Product> product;
+    private List<Product> products;
 
     @OneToOne
     private Transaction transaction;

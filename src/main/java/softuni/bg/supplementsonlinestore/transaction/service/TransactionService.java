@@ -26,11 +26,25 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public Transaction createNewTransaction(BigDecimal amount, TransactionType transactionType, TransactionStatus transactionStatus, LocalDateTime dateTime, String sender, User owner, String failureReason) {
+    public Transaction createWithdrawalTransaction(BigDecimal amount, TransactionStatus transactionStatus, LocalDateTime dateTime, User sender, String failureReason) {
         Transaction transaction = Transaction.builder()
                 .amount(amount)
-                .type(transactionType)
+                .type(TransactionType.WITHDRAWAL)
                 .status(transactionStatus)
+                .transactionDate(dateTime)
+                .sender(sender.getUsername())
+                .owner(sender)
+                .failureReason(failureReason)
+                .build();
+
+        return transactionRepository.save(transaction);
+    }
+
+    public Transaction createDepositTransaction(BigDecimal amount, TransactionStatus status, LocalDateTime dateTime, String sender, User owner, String failureReason) {
+        Transaction transaction = Transaction.builder()
+                .amount(amount)
+                .type(TransactionType.DEPOSIT)
+                .status(status)
                 .transactionDate(dateTime)
                 .sender(sender)
                 .owner(owner)
@@ -39,7 +53,6 @@ public class TransactionService {
 
         return transactionRepository.save(transaction);
     }
-
 
     public List<Transaction> findByUser(UUID id, String username) {
         return transactionRepository.findByUser(id, username

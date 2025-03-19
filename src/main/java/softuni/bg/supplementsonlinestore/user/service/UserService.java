@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -144,5 +145,11 @@ public class UserService implements UserDetailsService {
     public User findByUsername(String toUser) {
         Optional<User> byUsername = userRepository.findByUsername(toUser);
         return byUsername.orElseThrow(() -> new UsernameNotFoundException(toUser));
+    }
+
+    public User getCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 }

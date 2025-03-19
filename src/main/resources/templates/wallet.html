@@ -58,13 +58,17 @@
                 <p class="balance-amount" th:text="${user.wallet.balance + ' ' + user.wallet.currency}"></p>
             </div>
             <div class="wallet-actions">
-                <form th:action="@{'/wallet/' + ${user.wallet.id} + '/add-funds'}" th:method="PUT">
+                <form th:action="@{'/wallet/' + ${user.wallet.id} + '/add-funds'}" th:method="POST">
                     <input type="number" min="1" step="1" name="amount" placeholder="Amount"/>
                     <button type="submit" class="add-funds-btn">Add Funds</button>
                 </form>
-                <form th:action="@{'/wallet/' + ${user.wallet.id} + '/send'}" th:method="PUT">
-                    <input type="text" name="recipientUsername" placeholder="Enter friend's username" required/>
+                <form th:action="@{'/wallet/send'}" method="post">
+                    <input type="hidden" name="fromUser" th:value="${user.username}"/>
+                    <input type="text" name="toUser" placeholder="Enter friend's username" required/>
                     <input type="number" name="amount" placeholder="Amount" min="1" required/>
+
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                     <button type="submit" class="send-funds-btn">Send to a Friend</button>
                 </form>
             </div>
@@ -86,11 +90,11 @@
                 <tr th:each="transaction : ${user.transactions}">
                     <td th:text="${transaction.sender}"></td>
                     <td th:text="${transaction.owner.username}"></td>
-                    <td th:text="${transaction.type.name() == 'DEPOSIT' ? '+' + transaction.amount + ' ' + transaction.currency : '-' + transaction.amount + ' ' + transaction.currency}"></td>
-                    <td th:text="${transaction.type}"></td>
+                    <td th:text="${transaction.type.name() == 'DEPOSIT' ? '+' + transaction.amount + ' ' + 'EUR' : '-' + transaction.amount + ' ' + 'EUR'}"></td>
+                    <td th:text="${#strings.capitalize(#strings.toLowerCase(transaction.type.name()))}"></td>
                     <td>
-                        <span th:if="${transaction.status.name() == 'FAILED'}" class="status terminated">FAILED</span>
-                        <span th:if="${transaction.status.name() == 'SUCCEEDED'}" class="status active">SUCCEEDED</span>
+                        <span th:if="${transaction.status.name() == 'FAILED'}" class="status terminated">Failed</span>
+                        <span th:if="${transaction.status.name() == 'SUCCEEDED'}" class="status active">Succeeded</span>
                     </td>
                     <td th:text="${#temporals.format(transaction.transactionDate, 'dd MMM YYYY HH:mm')}"></td>
                 </tr>

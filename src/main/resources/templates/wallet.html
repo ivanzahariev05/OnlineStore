@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wallet - Nutriboost</title>
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.png}">
+    <link rel="stylesheet" href="/css/wallet.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-section">
+        <div class="profile-header">
+            <img th:src="${#strings.isEmpty(user.imageUrl) ? 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg' : user.imageUrl}"
+                 alt="Profile Picture" class="profile-picture"/>
+            <h3 class="profile-name" th:text="${user.username}"></h3>
+        </div>
+        <div class="details-section">
+            <div class="profile-name">
+                <strong>Name</strong>
+                <span th:text="${#strings.isEmpty(user.firstName) ? 'Edit profile': user.firstName + ' ' +  user.lastName}"></span>
+            </div>
+            <div class="profile-email">
+                <strong>Email</strong>
+                <span th:text="${user.email}"></span>
+            </div>
+            <a th:href="@{/home}" class="action-button">
+                <button><i class="fa-solid fa-house"></i> Home</button>
+            </a>
+            <a th:href="@{/edit/profile}" class="action-button">
+                <button><i class="fa-solid fa-user-pen"></i> Edit Profile</button>
+            </a>
+            <a th:href="@{/notifications}" class="action-button">
+                <button><i class="fa-solid fa-bell"></i> Notifications</button>
+            </a>
+            <a th:href="@{/wallet}" class="action-button">
+                <button><i class="fa-solid fa-wallet"></i> Wallet</button>
+            </a>
+            <a th:href="@{/order}" class="action-button">
+                <button><i class="fa-solid fa-box"></i> Orders</button>
+            </a>
+            <a th:if="${user.role.name=='ADMIN'}" th:href="@{/users}" class="action-button">
+                <button><i class="fa-solid fa-users"></i> Users</button>
+            </a>
+            <a th:href="@{/logout}" class="logout-button">
+                <button><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </a>
+        </div>
+    </div>
+</aside>
+
+<div class="wallet-page">
+    <div class="wallet-wrapper">
+        <div class="wallet-container">
+            <div class="wallet-header">
+                <h1>Account Balance</h1>
+                <p class="balance-amount" th:text="${user.wallet.balance + ' ' + user.wallet.currency}"></p>
+            </div>
+            <div class="wallet-actions">
+                <form th:action="@{'/wallet/' + ${user.wallet.id} + '/add-funds'}" th:method="PUT">
+                    <input type="number" min="1" step="1" name="amount" placeholder="Amount"/>
+                    <button type="submit" class="add-funds-btn">Add Funds</button>
+                </form>
+                <form th:action="@{'/wallet/' + ${user.wallet.id} + '/send'}" th:method="PUT">
+                    <input type="text" name="recipientUsername" placeholder="Enter friend's username" required/>
+                    <input type="number" name="amount" placeholder="Amount" min="1" required/>
+                    <button type="submit" class="send-funds-btn">Send to a Friend</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="transactions-container">
+            <table class="styled-table" th:unless="${ user.transactions.isEmpty()}">
+                <thead>
+                <tr>
+                    <th>Sender</th>
+                    <th>Receiver</th>
+                    <th>Amount</th>
+                    <th>Transaction Type</th>
+                    <th>Transaction Status</th>
+                    <th>Transaction Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="transaction : ${user.transactions}">
+                    <td th:text="${transaction.sender}"></td>
+                    <td th:text="${transaction.owner.username}"></td>
+                    <td th:text="${transaction.type.name() == 'DEPOSIT' ? '+' + transaction.amount + ' ' + transaction.currency : '-' + transaction.amount + ' ' + transaction.currency}"></td>
+                    <td th:text="${transaction.type}"></td>
+                    <td>
+                        <span th:if="${transaction.status.name() == 'FAILED'}" class="status terminated">FAILED</span>
+                        <span th:if="${transaction.status.name() == 'SUCCEEDED'}" class="status active">SUCCEEDED</span>
+                    </td>
+                    <td th:text="${#temporals.format(transaction.transactionDate, 'dd MMM YYYY HH:mm')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+    <table class="styled-table no-transactions-table" th:if="${user.transactions.isEmpty()}">
+        <thead>
+        <tr>
+            <th>No Transactions Available</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="text-align: center; font-style: italic;">You have no transactions yet.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #d4edc9, #b6e5a6, #9cd48b);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+.wallet-page {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: 260px;
+    padding-top: 20px;
+}
+
+.wallet-container {
+    width: 350px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin-left: 200px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.wallet-header h1 {
+    color: #2b5e20;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.balance-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #357a38;
+    background-color: rgba(43, 94, 32, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.wallet-actions {
+    margin-top: 20px;
+}
+
+.wallet-actions form {
+    margin-bottom: 10px;
+}
+
+.add-funds-btn, .send-funds-btn {
+    background-color: #2b5e20;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-funds-btn:hover, .send-funds-btn:hover {
+    background-color: #357a38;
+}
+
+input[type="text"], input[type="number"] {
+    font-size: 1rem;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+}
+
+
+.wallet-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+
+.wallet-container {
+    flex: 1;
+    min-width: 350px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.transactions-container {
+    flex: 2;
+    width: 100%;
+}
+
+.styled-table {
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.styled-table thead {
+    background-color: #2b5e20;
+    color: white;
+}
+
+.styled-table tbody tr:nth-child(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #e1f5e1;
+    transition: background-color 0.3s ease;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+}
+

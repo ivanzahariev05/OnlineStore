@@ -1,0 +1,105 @@
+body.home-page {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #d4edc9, #b6e5a6, #9cd48b);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0;
+}
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    width: 400px;
+    margin-left: 200px;
+    z-index: 10;
+}
+.header .logo {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #2b5e20;
+    text-decoration: none;
+}
+.header .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.header input[type="text"] {
+    font-size: 1rem;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.header button {
+    background-color: #2b5e20;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.header button:hover {
+    background-color: #357a38;
+}
+
+
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    margin: 20px 0;
+    margin-left: 220px;
+}
+.product-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.product-card h3 {
+    font-size: 1.2rem;
+    color: #2b5e20;
+    margin-bottom: 10px;
+}
+.product-card p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+}

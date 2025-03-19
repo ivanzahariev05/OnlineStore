@@ -16,8 +16,6 @@ import java.util.UUID;
 @Builder
 public class SendToAFriendRequest {
 
-    @NotNull
-    private String fromUser;
 
     @NotNull
     private String toUser;

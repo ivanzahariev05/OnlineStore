@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
 
 
-        // Find transactions where the user is either the sender or the receiver
-        @Query("SELECT t FROM Transaction t WHERE t.owner.id = :userId OR t.sender = :username")
-        List<Transaction> findByUser(@Param("userId") UUID userId, @Param("username") String username);
+        @Query("SELECT t FROM Transaction t WHERE t.owner = :username OR t.sender = :username")
+        List<Transaction> findTransactionsByUser(@Param("username") String username);
+
 }

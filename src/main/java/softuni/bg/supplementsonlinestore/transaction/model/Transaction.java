@@ -22,15 +22,15 @@ import java.util.UUID;
 public class Transaction {
 
 
-    @ManyToOne
-    @JsonBackReference
-    private User owner;
-
-    private String sender;
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
+    private String owner;
+
+    @Column(nullable = false)
+    private String sender;
 
     @Column(nullable = false)
     private BigDecimal amount;

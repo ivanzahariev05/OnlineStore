@@ -26,25 +26,18 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public Transaction createWithdrawalTransaction(BigDecimal amount, TransactionStatus transactionStatus, LocalDateTime dateTime, User sender, String failureReason) {
+    public Transaction createTransaction(BigDecimal amount,
+                                         String owner,
+                                         String sender,
+                                         TransactionType transactionType,
+                                         TransactionStatus transactionStatus,
+                                         LocalDateTime dateTime,
+                                         String failureReason) {
+
         Transaction transaction = Transaction.builder()
                 .amount(amount)
-                .type(TransactionType.WITHDRAWAL)
+                .type(transactionType)
                 .status(transactionStatus)
-                .transactionDate(dateTime)
-                .sender(sender.getUsername())
-                .owner(sender)
-                .failureReason(failureReason)
-                .build();
-
-        return transactionRepository.save(transaction);
-    }
-
-    public Transaction createDepositTransaction(BigDecimal amount, TransactionStatus status, LocalDateTime dateTime, String sender, User owner, String failureReason) {
-        Transaction transaction = Transaction.builder()
-                .amount(amount)
-                .type(TransactionType.DEPOSIT)
-                .status(status)
                 .transactionDate(dateTime)
                 .sender(sender)
                 .owner(owner)
@@ -54,8 +47,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public List<Transaction> findByUser(UUID id, String username) {
-        return transactionRepository.findByUser(id, username
-        );
+    public List<Transaction> findByUser(String username) {
+        return transactionRepository.findTransactionsByUser(username);
     }
 }

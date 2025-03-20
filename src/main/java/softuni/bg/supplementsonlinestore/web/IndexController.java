@@ -63,13 +63,7 @@ public class IndexController {
 
 
 
-    @GetMapping("/home")
-    public ModelAndView home(@AuthenticationPrincipal MetaDataAuthentication metaDataAuthority) {
-        ModelAndView modelAndView = new ModelAndView("home");
-        User user = userService.findById(metaDataAuthority.getId());
-        modelAndView.addObject("user", user);
-        return modelAndView;
-    }
+
 
 
 }

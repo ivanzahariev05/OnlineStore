@@ -1,8 +1,6 @@
 package softuni.bg.supplementsonlinestore.user.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotNull;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import softuni.bg.supplementsonlinestore.exception.DomainException;
-import softuni.bg.supplementsonlinestore.notification.dto.NotificationRequest;
 import softuni.bg.supplementsonlinestore.notification.service.NotificationService;
 import softuni.bg.supplementsonlinestore.security.MetaDataAuthentication;
 import softuni.bg.supplementsonlinestore.transaction.model.Transaction;
@@ -24,6 +21,7 @@ import softuni.bg.supplementsonlinestore.wallet.model.Wallet;
 import softuni.bg.supplementsonlinestore.wallet.service.WalletService;
 import softuni.bg.supplementsonlinestore.web.dto.EditProfileRequest;
 import softuni.bg.supplementsonlinestore.web.dto.RegisterRequest;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,12 +38,15 @@ public class UserService implements UserDetailsService {
     private final TransactionService transactionService;
     private final NotificationService notificationService;
 
+
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, WalletService walletService, TransactionService transactionService, NotificationService notificationService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.walletService = walletService;
         this.transactionService = transactionService;
         this.notificationService = notificationService;
+
+
     }
 
 
@@ -61,8 +62,13 @@ public class UserService implements UserDetailsService {
         if (userRepository.count() == 0) {
             user.setRole(Role.ADMIN);
         }
+
         Wallet wallet = walletService.createNewWallet(user);
+
+
         user.setWallet(wallet);
+
+
         userRepository.save(user);
         notificationService.saveNotificationPreference(user.getId(), true, registerRequest.getEmail());
         try {
@@ -139,17 +145,21 @@ public class UserService implements UserDetailsService {
     }
 
     public List<Transaction> findAllTransactions() {
-        return transactionService.findAll();
+        return transactionService.findByUser(getCurrentUser().getUsername());
     }
 
     public User findByUsername(String toUser) {
         Optional<User> byUsername = userRepository.findByUsername(toUser);
-        return byUsername.orElseThrow(() -> new UsernameNotFoundException(toUser));
+        return byUsername.orElseThrow(() -> new UsernameNotFoundException("User wtih "+ toUser +"username not found"));
     }
 
     public User getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    }
+
+    public void increaseOrdersCount(User user) {
+        user.setOrdersCount(user.getOrdersCount() + 1);
     }
 }

@@ -8,14 +8,14 @@
   <link rel="stylesheet" href="/css/home.css">
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
+
 <body class="home-page">
 <aside class="sidebar">
   <div class="sidebar-section">
     <div class="profile-header">
       <img th:src="${#strings.isEmpty(user.imageUrl) ? 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg' : user.imageUrl}"
-           alt="Profile Picture" class="profile-picture" />
+           alt="Profile Picture" class="profile-picture"/>
       <h3 class="profile-name" th:text="${user.username}"></h3>
     </div>
     <div class="details-section">
@@ -33,13 +33,13 @@
       <a th:href="@{/edit/profile}" class="action-button">
         <button><i class="fa-solid fa-user-pen"></i> Edit Profile</button>
       </a>
-      <a th:href="@{notifications}" class="action-button">
+      <a th:href="@{/notifications}" class="action-button">
         <button><i class="fa-solid fa-bell"></i> Notifications</button>
       </a>
       <a th:href="@{/wallet}" class="action-button">
         <button><i class="fa-solid fa-wallet"></i> Wallet</button>
       </a>
-      <a th:href="@{/order}" class="action-button">
+      <a th:href="@{/orders}" class="action-button">
         <button><i class="fa-solid fa-box"></i> Orders</button>
       </a>
       <a th:if="${user.role.name=='ADMIN'}" th:href="@{/users}" class="action-button">
@@ -51,23 +51,54 @@
     </div>
   </div>
 </aside>
+
 <header class="header">
-  <div class="top-right">
+  <div class="header-left">
     <h1 class="logo">Nutriboost</h1>
-    <input type="text" placeholder="Search..." class="search-input">
-    <button class="search-button">🔍</button>
-    <button class="cart-button">🛒 <span class="cart-count">0</span></button>
+  </div>
+  <div class="header-right">
+    <select name="category"
+            th:onchange="|window.location.href='/products?productType=' + this.value|">
+      <option value="">Select category</option>
+      <option th:each="productType : ${productTypes}"
+              th:value="${productType}"
+              th:text="${#strings.capitalize(productType.name().replace('_', ' ').toLowerCase())}">
+      </option>
+    </select>
   </div>
 </header>
 
-<main class="product-grid">
-  <div class="product-card" th:each="product : ${productRequest}">
-    <img th:src="@{${product.imageUrl}}" alt="Product Image">
-    <h3 th:text="${product.name}">Product Name</h3>
-    <p th:text="${product.price + ' BGN'}">Price</p>
-  </div>
+<main class="content-wrapper">
+  <section class="promo-section">
+    <div class="promo-banner">🔥 <strong>Limited Time Offers - Up to 50% Off!</strong> 🔥</div>
+  </section>
+
+  <section class="carousel-container">
+    <button id="prev-btn">❮</button>
+    <div class="product-carousel">
+      <div class="product-wrapper">
+        <div class="product-card" th:each="product : ${products}">
+          <a th:href="@{'/products/' + ${product.id}}" class="product-link">
+            <img th:src="@{${product.imageUrl}}" alt="Product Image">
+            <h3 th:text="${product.name}">Product Name</h3>
+            <p class="original-price" th:text="'€' + ${product.price}"></p>
+          </a>
+        </div>
+      </div>
+    </div>
+    <button id="next-btn">❯</button>
+  </section>
+
 </main>
 
+
+<script>
+  function filterByCategory() {
+    let selectedCategory = document.getElementById("categoryDropdown").value;
+    window.location.href = selectedCategory ? '/home?category=' + selectedCategory : '/home';
+  }
+</script>
+<script src="/js/home.js"></script>
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

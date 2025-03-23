@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Users - NutriBoost</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${product.name} + ' - Nutriboost'"></title>
+  <link rel="stylesheet" href="/css/product-details.css">
   <link rel="icon" type="image/png" th:href="@{/images/favicon.png}">
-  <link rel="stylesheet" href="/css/users.css">
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -13,7 +14,7 @@
   <div class="sidebar-section">
     <div class="profile-header">
       <img th:src="${#strings.isEmpty(user.imageUrl) ? 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg' : user.imageUrl}"
-           alt="Profile Picture" class="profile-picture"/>
+           alt="Profile Picture" class="profile-picture" />
       <h3 class="profile-name" th:text="${user.username}"></h3>
     </div>
     <div class="details-section">
@@ -49,46 +50,28 @@
     </div>
   </div>
 </aside>
-<table class = styled-table>
-  <thead>
-  ,<tr>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Role</th>
-    <th>Orders Count</th>
-    <th>Status</th>
-    <th>Switch role</th>
-    <th>Switch status</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="user : ${users}">
-    <td th:text="${user.username}"></td>
-    <td th:text="${user.email}"></td>
-    <td th:text="${#strings.capitalize(#strings.toLowerCase(user.role.name()))}"></td>
-    <td th:text="${user.ordersCount}"></td>
-    <td>
-      <span th:if="${user.active}" class="active-status">Active</span>
-      <span th:unless="${user.active}" class="inactive-status">Inactive</span>
-    </td>
-    <td>
-      <form th:action="@{'/users/' + ${user.id} + '/role'}" th:method="POST">
-        <button class = button-action>
-          <span>Role</span>
-        </button>
+
+<div class="product-container">
+  <div class="product-image">
+    <img th:src="@{${product.imageUrl}}" alt="Product Image">
+  </div>
+  <div class="product-info">
+    <h1 th:text="${product.name}">Product Name</h1>
+    <p th:text="${product.description}">Product Description</p>
+    <p class="original-price" th:text="'€' + ${product.price}"></p>
+    <div class="product-actions">
+      <div th:if="${insufficientFunds}" class="error-message">
+        <p th:text="${insufficientFunds}"></p>
+      </div>
+      <form th:action="@{'/products/buy/' + ${product.id}}" method="POST">
+        <input type="hidden" name="productId" th:value="${product.id}" />
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" min="1" value="1" required />
+        <button type="submit"><i class="fa-solid fa-credit-cart"></i> Buy now</button>
       </form>
-    </td>
-    <td>
-      <form th:action="@{'/users/' + ${user.id} + '/status'}" th:method="POST">
-        <button class = button-action>
-          <span>Status</span>
-        </button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
-</table>
-<div th:replace="~{fragments/footer :: footer}">
+    </div>
+  </div>
 </div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

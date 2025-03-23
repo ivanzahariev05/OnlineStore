@@ -38,7 +38,7 @@
             <a th:href="@{/wallet}" class="action-button">
                 <button><i class="fa-solid fa-wallet"></i> Wallet</button>
             </a>
-            <a th:href="@{/order}" class="action-button">
+            <a th:href="@{/orders}" class="action-button">
                 <button><i class="fa-solid fa-box"></i> Orders</button>
             </a>
             <a th:if="${user.role.name=='ADMIN'}" th:href="@{/users}" class="action-button">
@@ -63,6 +63,13 @@
                     <input type="number" min="1" step="1" name="amount" placeholder="Amount"/>
                     <button type="submit" class="add-funds-btn">Add Funds</button>
                 </form>
+                <div th:if="${userNotFound}" class="error-message">
+                    <p th:text="${userNotFound}"></p>
+                </div>
+
+                <div th:if="${insufficientFunds}" class="error-message">
+                    <p th:text="${insufficientFunds}"></p>
+                </div>
                 <form th:action="@{'/wallet/send'}" method="post">
                     <input type="hidden" name="fromUser" th:value="${user.username}"/>
                     <input type="text" name="toUser" placeholder="Enter friend's username" required/>

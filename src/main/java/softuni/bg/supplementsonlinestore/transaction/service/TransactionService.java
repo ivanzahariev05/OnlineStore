@@ -1,6 +1,8 @@
 package softuni.bg.supplementsonlinestore.transaction.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import softuni.bg.supplementsonlinestore.transaction.model.Transaction;
 import softuni.bg.supplementsonlinestore.transaction.model.TransactionStatus;
 import softuni.bg.supplementsonlinestore.transaction.model.TransactionType;
@@ -26,6 +28,7 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Transaction createTransaction(BigDecimal amount,
                                          String owner,
                                          String sender,
@@ -49,5 +52,9 @@ public class TransactionService {
 
     public List<Transaction> findByUser(String username) {
         return transactionRepository.findTransactionsByUser(username);
+    }
+
+    public void updateTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
     }
 }

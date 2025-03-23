@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import softuni.bg.supplementsonlinestore.exception.DomainException;
+import softuni.bg.supplementsonlinestore.exception.EmailAlreadyInUserException;
+import softuni.bg.supplementsonlinestore.exception.UserNotFoundException;
+import softuni.bg.supplementsonlinestore.exception.UsernameAlreadyInUseException;
 import softuni.bg.supplementsonlinestore.notification.service.NotificationService;
 import softuni.bg.supplementsonlinestore.security.MetaDataAuthentication;
 import softuni.bg.supplementsonlinestore.transaction.model.Transaction;
@@ -21,7 +23,6 @@ import softuni.bg.supplementsonlinestore.wallet.model.Wallet;
 import softuni.bg.supplementsonlinestore.wallet.service.WalletService;
 import softuni.bg.supplementsonlinestore.web.dto.EditProfileRequest;
 import softuni.bg.supplementsonlinestore.web.dto.RegisterRequest;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,10 +54,10 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void registerUser(RegisterRequest registerRequest) {
         if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
-            throw new DomainException("Username is already in use!");
+            throw new UsernameAlreadyInUseException("Username is already in use!");
         }
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
-            throw new DomainException("The email address is already in use!");
+            throw new EmailAlreadyInUserException("The email address is already in use!");
         }
         User user  = userInitialize(registerRequest);
         if (userRepository.count() == 0) {
@@ -80,7 +81,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return new MetaDataAuthentication(user.getId(), username, user.getPassword(), user.isActive(), user.getRole());
     }
@@ -102,7 +103,7 @@ public class UserService implements UserDetailsService {
 
     public User findById(UUID id) {
         return userRepository.findUserById(id)
-                .orElseThrow(() -> new DomainException("User not found with ID: " + id));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + id));
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -115,12 +116,13 @@ public class UserService implements UserDetailsService {
         if (editProfile.getLastName() != null && !editProfile.getLastName().isBlank()) {
             user.setLastName(editProfile.getLastName());
         }
-
-        user.setImageUrl(editProfile.getImageUrl());
-
+        if (editProfile.getImageUrl() != null && !editProfile.getImageUrl().isBlank()) {
+            user.setImageUrl(editProfile.getImageUrl());
+        }
 
         userRepository.save(user);
     }
+
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -150,7 +152,7 @@ public class UserService implements UserDetailsService {
 
     public User findByUsername(String toUser) {
         Optional<User> byUsername = userRepository.findByUsername(toUser);
-        return byUsername.orElseThrow(() -> new UsernameNotFoundException("User wtih "+ toUser +"username not found"));
+        return byUsername.orElseThrow(() -> new UserNotFoundException("User with "+ toUser +" username not found"));
     }
 
     public User getCurrentUser() {

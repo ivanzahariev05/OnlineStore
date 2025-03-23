@@ -11,7 +11,9 @@ import softuni.bg.supplementsonlinestore.security.MetaDataAuthentication;
 import softuni.bg.supplementsonlinestore.user.model.User;
 import softuni.bg.supplementsonlinestore.user.service.UserService;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/orders")
@@ -30,7 +32,10 @@ public class OrderController {
         ModelAndView modelAndView = new ModelAndView("orders");
 
         User user = userService.findById(metaDataAuthentication.getId());
-        List<Order> orders =  orderService.getAllOrders();
+        List<Order> orders =  orderService.getAllOrders(user.getId())
+                .stream().limit(10)
+                .sorted(Comparator.comparing(Order::getOrderDate).reversed())
+                .collect(Collectors.toList());
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("orders", orders);

@@ -52,16 +52,17 @@ public class User {
 
     private int ordersCount;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany()
     @JsonManagedReference
     private List<Transaction> transactions;
 
     @OneToOne(mappedBy = "owner")
     @JsonManagedReference
     private Wallet wallet;
+
 
 
 }

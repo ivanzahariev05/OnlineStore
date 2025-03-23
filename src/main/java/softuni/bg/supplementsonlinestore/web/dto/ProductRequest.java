@@ -1,5 +1,6 @@
 package softuni.bg.supplementsonlinestore.web.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductRequest {
 
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private String imageUrl;
+    @NotBlank
+    private int quantity;
+
 }

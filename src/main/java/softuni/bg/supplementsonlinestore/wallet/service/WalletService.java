@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import softuni.bg.supplementsonlinestore.exception.DomainException;
+import softuni.bg.supplementsonlinestore.exception.InsufficientFundsSendMoneyException;
+import softuni.bg.supplementsonlinestore.exception.UserNotFoundException;
 import softuni.bg.supplementsonlinestore.transaction.model.Transaction;
 import softuni.bg.supplementsonlinestore.transaction.model.TransactionStatus;
 import softuni.bg.supplementsonlinestore.transaction.model.TransactionType;
@@ -73,13 +75,12 @@ public class WalletService {
         log.info("Initiating sendToAFriend: sender={}, receiver={}, amount={}",
                 userService.getCurrentUser().getUsername(), sendToAFriendRequest.getToUser(), sendToAFriendRequest.getAmount());
 
-        Wallet senderWallet = userService.getCurrentUser().getWallet();
-        Wallet receiverWallet = userService.findByUsername(sendToAFriendRequest.getToUser()).getWallet();
-
-        if (receiverWallet == null) {
-            log.error("Recipient user not found: {}", sendToAFriendRequest.getToUser());
-            throw new DomainException("User not found");
+        User receiverUser = userService.findByUsername(sendToAFriendRequest.getToUser());
+        if (receiverUser == null) {
+            throw new UserNotFoundException("User not found");
         }
+        Wallet receiverWallet = receiverUser.getWallet();
+        Wallet senderWallet = userService.getCurrentUser().getWallet();
 
         BigDecimal amount = sendToAFriendRequest.getAmount();
 
@@ -87,7 +88,6 @@ public class WalletService {
             charge(senderWallet, amount, false);
             charge(receiverWallet, amount, true);
 
-            // Запазване на транзакции
             transactionService.createTransaction(
                     amount,
                     receiverWallet.getOwner().getUsername(),
@@ -110,46 +110,46 @@ public class WalletService {
 
             log.info("Funds transferred successfully: sender={}, receiver={}, amount={}",
                     senderWallet.getOwner().getUsername(), receiverWallet.getOwner().getUsername(), amount);
-        } catch (DomainException e) {
-            log.warn("Transaction failed: {}", e.getMessage());
+        }catch(InsufficientFundsSendMoneyException e){
+                log.warn("Transaction failed: {}", e.getMessage());
 
-            transactionService.createTransaction(
-                    amount,
-                    senderWallet.getOwner().getUsername(),
-                    receiverWallet.getOwner().getUsername(),
-                    TransactionType.WITHDRAWAL,
-                    TransactionStatus.FAILED,
-                    LocalDateTime.now(),
-                    "Transfer failed"
-            );
+                transactionService.createTransaction(
+                        amount,
+                        receiverWallet.getOwner().getUsername(),
+                        senderWallet.getOwner().getUsername(),
+                        TransactionType.WITHDRAWAL,
+                        TransactionStatus.FAILED,
+                        LocalDateTime.now(),
+                        "Insufficient funds"
+                );
 
-            transactionService.createTransaction(
-                    amount,
-                    receiverWallet.getOwner().getUsername(),
-                    senderWallet.getOwner().getUsername(),
-                    TransactionType.DEPOSIT,
-                    TransactionStatus.FAILED,
-                    LocalDateTime.now(),
-                    "Transfer failed"
-            );
+                transactionService.createTransaction(
+                        amount,
+                        receiverWallet.getOwner().getUsername(),
+                        senderWallet.getOwner().getUsername(),
+                        TransactionType.DEPOSIT,
+                        TransactionStatus.FAILED,
+                        LocalDateTime.now(),
+                        "Transfer failed"
+                );
 
-            throw e;
+                throw e;
         }
     }
 
-    @Transactional
-    public void charge(Wallet wallet, BigDecimal amount, boolean isCredit) {
-        if (!isCredit && wallet.getBalance().compareTo(amount) < 0) {
-            log.warn("Insufficient funds: user={}, balance={}, requested={}",
-                    wallet.getOwner().getUsername(), wallet.getBalance(), amount);
-            throw new DomainException("Insufficient funds");
+            @Transactional
+            public void charge (Wallet wallet, BigDecimal amount,boolean isCredit){
+                if (!isCredit && wallet.getBalance().compareTo(amount) < 0) {
+                    log.warn("Insufficient funds: user={}, balance={}, requested={}",
+                            wallet.getOwner().getUsername(), wallet.getBalance(), amount);
+                    throw new InsufficientFundsSendMoneyException("Insufficient funds");
+                }
+
+                BigDecimal newBalance = isCredit ? wallet.getBalance().add(amount) : wallet.getBalance().subtract(amount);
+                wallet.setBalance(newBalance);
+                walletRepository.save(wallet);
+
+                log.info("{} wallet balance updated: user={}, new balance={}",
+                        isCredit ? "Credited" : "Debited", wallet.getOwner().getUsername(), wallet.getBalance());
+            }
         }
-
-        BigDecimal newBalance = isCredit ? wallet.getBalance().add(amount) : wallet.getBalance().subtract(amount);
-        wallet.setBalance(newBalance);
-        walletRepository.save(wallet);
-
-        log.info("{} wallet balance updated: user={}, new balance={}",
-                isCredit ? "Credited" : "Debited", wallet.getOwner().getUsername(), wallet.getBalance());
-    }
-}

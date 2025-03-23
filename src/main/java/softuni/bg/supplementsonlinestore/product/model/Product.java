@@ -24,6 +24,7 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductType type;

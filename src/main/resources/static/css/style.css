@@ -107,6 +107,13 @@ body {
     text-align: center;
     font-size: 0.8rem;
 }
+.alert-warning{
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
 
 .logo-image {
     display: block;

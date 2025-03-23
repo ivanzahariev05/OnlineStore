@@ -30,15 +30,17 @@ public class IndexController {
 
 
     @GetMapping("/login")
-    public ModelAndView getLogin(@RequestParam(value = "error", required = false) User errorParam) {
+    public ModelAndView getLogin(@RequestParam(value = "error", required = false) String error) {
         ModelAndView modelAndView = new ModelAndView("login");
-        modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
-        if (errorParam != null) {
+
+        if (error != null) {
             modelAndView.addObject("errorMessage", "Incorrect username or password.");
         }
+
         return modelAndView;
     }
+
 
 
     @GetMapping("/register")

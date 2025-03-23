@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import softuni.bg.supplementsonlinestore.notification.NotificationClient;
 import softuni.bg.supplementsonlinestore.notification.dto.NotificationPreference;
-import softuni.bg.supplementsonlinestore.notification.dto.NotificationRequest;
 import softuni.bg.supplementsonlinestore.notification.dto.UpsertNotificationPreference;
 
 import java.util.UUID;

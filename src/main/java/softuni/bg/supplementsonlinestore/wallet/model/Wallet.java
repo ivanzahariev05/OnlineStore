@@ -1,7 +1,6 @@
 package softuni.bg.supplementsonlinestore.wallet.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,4 +32,9 @@ public class Wallet {
     @JsonBackReference
     private User owner;
 
+    public Wallet(User user, BigDecimal zero, Currency eur) {
+        this.owner = user;
+        this.balance = zero;
+        this.currency = eur;
+    }
 }

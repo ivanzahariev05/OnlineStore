@@ -31,11 +31,15 @@ public class ProductController {
     @GetMapping()
     public ModelAndView productsPage(@RequestParam ProductType productType, @AuthenticationPrincipal MetaDataAuthentication metaDataAuthentication) {
         ModelAndView modelAndView = new ModelAndView("products");
+
         User user = userService.findById(metaDataAuthentication.getId());
         List<Product> products = productService.findByProductType(productType);
+        List<ProductType> productTypes = List.of(ProductType.values());
+
         modelAndView.addObject("products", products);
         modelAndView.addObject("productType", productType);
         modelAndView.addObject("user", user);
+        modelAndView.addObject("productTypes", productTypes);
 
         return modelAndView;
     }

@@ -80,12 +80,14 @@ body {
 }
 
 .transactions-container {
-    flex: 2;
     width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .styled-table {
     width: 100%;
+    min-width: 600px;
     border-collapse: collapse;
     background: white;
     border-radius: 10px;
@@ -107,6 +109,7 @@ body {
 .no-transactions-table {
     margin-top: 10px;
     width: 100%;
+    min-width: 600px;
     text-align: center;
     background: #2d602d;
     color: white;

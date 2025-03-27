@@ -50,7 +50,6 @@
         </div>
     </div>
 </aside>
-<h1 th:text="'Products in ' + ${productType}"></h1>
 <header class="header">
     <div class="header-left">
         <h1 class="logo">Nutriboost</h1>
@@ -66,7 +65,12 @@
         </select>
     </div>
 </header>
-<div class="product-grid">
+<div class="main-content">
+
+
+<h1 class="product-title" th:text="'Products in ' + ${#strings.capitalize(productType.name().replace('_', ' ').toLowerCase())}"></h1>
+
+<div class="product-grid" th:unless="${#lists.isEmpty(products)}">
     <div th:each="product : ${products}" class="product-card">
         <a th:href="@{'/products/' + ${product.id}}" class="product-link">
             <img th:src="@{${product.imageUrl}}" alt="Product Image">
@@ -74,6 +78,12 @@
             <p class="original-price" th:text="'€' + ${product.price}"></p>
         </a>
     </div>
+</div>
+
+<div class="empty-products-container" th:if="${#lists.isEmpty(products)}">
+    <p class="no-products-message">No products available in this category. Try another one!</p>
+    <img src="/images/no-products-available.webp" alt="Empty product cart" class="cart-img">
+</div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

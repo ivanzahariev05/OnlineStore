@@ -8,19 +8,34 @@ body {
     min-height: 100vh;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 15px;
+    padding: 10px 15px;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    width: calc(100% - 350px); /* Оставя място за sidebar */
-    height: 55px;
     position: fixed;
     top: 0;
-    left: 340px;
+    left: 450px;
+    width: calc(100% - 470px);
     z-index: 10;
+    height: 60px;
+}
+.product-title {
+    margin-top: 80px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2b5e20;
 }
 
 .header .logo {
@@ -39,16 +54,19 @@ body {
     cursor: pointer;
 }
 
-/* MAIN CONTENT */
+
 .main-content {
     margin-top: 70px;
-    margin-left: 340px; /* Оставя място за sidebar */
-    width: calc(100% - 350px); /* Оставя място за sidebar */
+    margin-left: 340px;
+    width: calc(100% - 350px);
     text-align: center;
     flex-grow: 1;
 }
+.main-content {
+    flex: 1;
+}
 
-/* PRODUCT GRID */
+
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -57,11 +75,11 @@ body {
     width: 100%;
     background-color: white;
     border-radius: 8px;
-    max-width: 1100px; /* За да не става твърде разтегнато */
+    max-width: 1100px;
     margin: auto;
 }
 
-/* PRODUCT CARD */
+
 .product-card {
     background-color: white;
     border-radius: 6px;
@@ -101,6 +119,34 @@ body {
     color: #c60000;
 
 }
+.empty-products-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 60vh;
+}
+
+.no-products-message {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2b5e20;
+    margin-bottom: 15px;
+}
+
+.cart-img {
+    max-width: 350px;
+    height: auto;
+    opacity: 0.8;
+    transition: transform 0.3s ease-in-out, opacity 0.3s;
+}
+
+.cart-img:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}
 
 
 
@@ -109,7 +155,7 @@ footer {
     color: #fff;
     text-align: center;
     padding: 10px 0;
-    position: absolute;
+    position: relative;
     bottom: 0;
     width: 100%;
     font-size: 14px;
